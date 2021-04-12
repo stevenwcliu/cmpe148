@@ -35,10 +35,10 @@ clientSocket = ssl.wrap_socket(clientSocket)
 
 # Authentication
 username =  "anna.nana2332@gmail.com"
-password =  "klbthptnhqcqyivy"
+password =  "ananana123!@#"
 base64_str = ("\x00"+username+"\x00"+password).encode()
 base64_str = base64.b64encode(base64_str)
-authMsg = "AUTH PLAIN".encode()+base64_str+"\r\n".encode()
+authMsg = "AUTH PLAIN ".encode()+base64_str+"\r\n".encode()
 clientSocket.send(authMsg)
 recv_auth = clientSocket.recv(1024).decode()
 print("After AUTH command: " + recv_auth)
