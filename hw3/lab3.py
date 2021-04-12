@@ -7,11 +7,10 @@ msg = "\r\n I love computer networks!"
 endmsg = "\r\n.\r\n"
 
 # Choose a mail server (e.g. Google mail server) and call it mailserver
-mailserver = ("mail.smtp2go.com", 2525)
+mailserver = ("smtp.gmail.com", 587)
 
 # Create socket called clientSocket and establish a TCP connection with mailserver
 clientSocket = socket(AF_INET, SOCK_STREAM)
-#clientSocket = ssl.wrap_socket(clientSocket)
 clientSocket.connect(mailserver)
 
 recv = clientSocket.recv(1024).decode()
@@ -27,31 +26,30 @@ print(recv1)
 if recv1[:3] != '250':
     print('250 reply not received from server.')
 
-# command = 'STARTTLS\r\n'
-# command = command.encode()
-# clientSocket.send(command)
-# recv2 = clientSocket.recv(1024).decode()
-# print("Message after STARTTLS command:" + recv2)
-# if recv2[:3] != '250':
-#    print('250 reply not received from server.')
+tlsCommand = 'STARTTLS\r\n'
+tlsCommand = tlsCommand.encode()
+clientSocket.send(tlsCommand)
+recv2 = clientSocket.recv(1024).decode()
+print("Message after STARTTLS command:" + recv2)
+clientSocket = ssl.wrap_socket(clientSocket)
 
-# Send MAIL FROM command and print server response.
-mailFrom = "MAIL FROM: <anna.nana2332@gmail.com>\r\n"
-clientSocket.send(mailFrom.encode())
-recv3 = clientSocket.recv(1024).decode()
-print("After MAIL FROM command: " + recv3)
-if recv1[:3] != '250':
-    print('250 reply not received from server.')
-
-#Username and password
+# Authentication
 username =  "anna.nana2332@gmail.com"
-password =  "ananana123!@#"
+password =  "klbthptnhqcqyivy"
 base64_str = ("\x00"+username+"\x00"+password).encode()
 base64_str = base64.b64encode(base64_str)
 authMsg = "AUTH PLAIN".encode()+base64_str+"\r\n".encode()
 clientSocket.send(authMsg)
 recv_auth = clientSocket.recv(1024).decode()
 print("After AUTH command: " + recv_auth)
+if recv1[:3] != '250':
+    print('250 reply not received from server.')
+
+# Send MAIL FROM command and print server response.
+mailFrom = "MAIL FROM: <anna.nana2332@gmail.com>\r\n"
+clientSocket.send(mailFrom.encode())
+recv3 = clientSocket.recv(1024).decode()
+print("After MAIL FROM command: " + recv3)
 if recv1[:3] != '250':
     print('250 reply not received from server.')
 
